@@ -5,7 +5,7 @@ let DisplayData = () => {
         method: "post",
         data: { SearchResult: SearchResult },
         success: function (result) {
-            console.log((result))
+            // console.log((result))
             let Obj = JSON.parse(result)
             $(".flight-main-0").html(Obj.FirstList)
             if (Obj.SecondList != '') {

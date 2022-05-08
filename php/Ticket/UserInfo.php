@@ -34,8 +34,8 @@ $UserInfoString = '
     <td class="customer-baggage" colspan="2">  
         <div class="input-group">        
             <select class="input-baggage form-control">
-                <option value="0-0" selected hidden disabled>Chọn hành lý ký gửi</option>
-                <option value="0-0">Không mang hành lý</option>';
+                <option value="0-0-22" selected hidden disabled>Chọn hành lý ký gửi</option>
+                <option value="0-0-22">Không mang hành lý</option>';
 foreach ($BaggageList as $Baggage) {
     $UserInfoString .= '<option value="' . $Baggage["PRICE"] . '-' . $Baggage["WEIGHT"] . '-' . $Baggage["BAGGAGEID"] . '">khối lượng (' . $Baggage["WEIGHT"] . ' Kg): ' . number_format($Baggage["PRICE"]) . ' VND</option>';
 }

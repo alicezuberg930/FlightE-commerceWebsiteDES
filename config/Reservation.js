@@ -125,6 +125,7 @@ $(document).on("click", "#pay", function () {
         OrderDetails.ReturnFlight = $(".flight-main-1 .seat-list").attr("data-flight")
     }
     OrderDetails.StartFlight = $(".flight-main-0 .seat-list").attr("data-flight")
+    OrderDetails.Quantity = i
     let customerinfo = document.querySelectorAll(".row-1"),
         baggage = document.querySelectorAll(".row-2"),
         contactinfo = document.querySelector(".row-3")

@@ -17,7 +17,6 @@ $(document).on("change", "#state", function () {
         data: { State: $(this).val(), ID: $(this).parent().parent().attr("data-id") },
         method: "post",
         success: function (data) {
-            console.log(data)
             if (data != 0) {
                 Swal.fire({
                     position: 'bottom-end',
@@ -33,8 +32,24 @@ $(document).on("change", "#state", function () {
     })
 })
 $(document).on("click", "#deletebutton", function () {
-    let StartDate = $(this).parent().parent().children().eq(6).text().split("-")
-    let EndDate = $(this).parent().parent().children().eq(8).text().split("-")
+    let OrderDate = $(this).parent().parent().children().eq(0).text().split("-")
+    if ((new Date().getTime() - new Date(OrderDate[2] + "-" + OrderDate[1] + "-" + OrderDate[0]).getTime()) / (1000 * 60 * 60) >= 24) {
+        Swal.fire({
+            position: 'center',
+            icon: 'error',
+            html: "<h4>Đã quá 24h</h4>",
+        })
+        return
+    }
+    let StartDate = $(this).parent().parent().children().eq(5).text().split("-")
+    if (new Date(StartDate[2] + "-" + StartDate[1] + "-" + StartDate[0]).getTime() < new Date().getTime()) {
+        Swal.fire({
+            position: 'center',
+            icon: 'error',
+            html: "<h4>Đã qua ngày khởi hành</h4>",
+        })
+        return
+    }
     let OrderID = $(this).parent().parent().attr("data-id")
     Swal.fire({
         position: 'center',
@@ -95,7 +110,7 @@ function ExportOrderDetail(ID) {
         }
     })
 }
-export { ExportExcel, ExportOrder, ExportOrderDetail }
+export { ExportOrder, ExportOrderDetail }
 $("#search").keyup(function () {
     if ($(this).val() == '') {
         DisplayData(CurrentPage, "../php/Order/DisplayOrderEmployee.php")

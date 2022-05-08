@@ -4,7 +4,7 @@ require_once("../../class/flightpath.php");
 session_start();
 $OrderInfo = $_POST["OrderDetails"];
 $FlightID = $OrderInfo["StartFlight"];
-$Quantity = count($OrderInfo["CustomerInfo"]);
+$Quantity = $OrderInfo["Quantity"];
 $Flight = $FlightObject->SearchFlight(" and FlightID = '$FlightID'")[0];
 $StartFlightPath = $FlightPathObject->GetFlightPath(" and PathID = '" . $Flight["PATHID"] . "'")[0];
 $StartFlightPathString = $StartFlightPath["CN1"] . " (" . $StartFlightPath["STARTAIRPORT"] . ") - " . $StartFlightPath["CN2"] . " (" . $StartFlightPath["ENDAIRPORT"] . ")";
@@ -106,4 +106,4 @@ foreach ($OrderInfo["CustomerInfo"] as $o) {
 }
 $_SESSION["Order"] = $OrderArray;
 $_SESSION["OrderDetail"] = $OrderDetailsArray;
-die(json_encode($OrderDetailsArray));
+// die(json_encode($OrderDetailsArray));

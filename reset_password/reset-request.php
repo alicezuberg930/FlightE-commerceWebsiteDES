@@ -1,9 +1,15 @@
 <?php require_once("../connection.php");
 require_once("../DESAlgorithm.php");
+$a = explode("/", $_SERVER["SCRIPT_FILENAME"]);
+$string = '';
+for ($i = 3; $i < sizeof($a) - 2; $i++) {
+    $string .= $a[$i] . "/";
+}
+$url = "http://localhost/" . $string . "/pages/create-new-password.php";
 if (isset($_POST["reset-request-submit"])) {
     $selector = generateRandomString(8);
     $token = generateRandomString(24);
-    $url = "http://localhost/Projects/QuanLyVeMayBay/pages/create-new-password.php?selector=" . $selector . "&validator=" . $token;
+    $url = $url . "?selector=" . $selector . "&validator=" . $token;
     $expire_in = date("U") + 300;
     Query("delete from resetpassword where ResetEmail = '" . $_POST["email"] . "'");
     Query("INSERT INTO resetpassword(ResetEmail, ResetSelector, ResetToken, ResetExpire) values ('" . $_POST["email"] . "','$selector','" . EncryptPlaintextToHexadecimal($token) . "','$expire_in')");

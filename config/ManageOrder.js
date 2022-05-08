@@ -17,7 +17,7 @@ $(document).on("click", "#detail", function () {
     GetDetails(OrderID)
 })
 $(document).on("click", "#cancel", function () {
-    let OrderDate = $(this).parent().parent().children().eq(1).text().split("-")
+    let OrderDate = $(this).parent().parent().children().eq(0).text().split("-")
     if ((new Date().getTime() - new Date(OrderDate[2] + "-" + OrderDate[1] + "-" + OrderDate[0]).getTime()) / (1000 * 60 * 60) >= 24) {
         Swal.fire({
             position: 'center',
@@ -26,7 +26,7 @@ $(document).on("click", "#cancel", function () {
         })
         return
     }
-    let StartDate = $(this).parent().parent().children().eq(6).text().split("-")
+    let StartDate = $(this).parent().parent().children().eq(5).text().split("-")
     if (new Date(StartDate[2] + "-" + StartDate[1] + "-" + StartDate[0]) < new Date()) {
         Swal.fire({
             position: 'center',

@@ -74,7 +74,7 @@ $(document).on("click", "#cancel", function () {
                 method: "post",
                 data: { OrderID: OrderID },
                 success: function (data) {
-                    if (data != '') {
+                    if (data != 0) {
                         Swal.fire({
                             position: 'center',
                             icon: 'success',

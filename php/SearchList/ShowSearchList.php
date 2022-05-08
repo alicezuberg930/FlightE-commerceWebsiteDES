@@ -256,7 +256,47 @@ $Array["FirstList"] = HeaderHTML($SearchResult["StartDate"], $HeaderPath) . Body
 if (!empty($SearchResult["EndDate"])) {
   $EndPath = " and fp.PathID = '" . $SearchResult["EndAirport"] . "-" . $SearchResult["StartAirport"] . "'";;
   $ReturnFlightList = $FlightObject->SearchFlight("$EndPath$AirlineID");
-  $ReversePath = $FlightPathObject->GetFlightPath(" and PathID = $EndPath");
-  $Array["SecondList"] = HeaderHTML($SearchResult["EndDate"], $ReversePath) . BodyHTML($ReturnFlightList, $ReversePath);
+  $ReversePath = $FlightPathObject->GetFlightPath("$EndPath");
+  $EndFlightList = [];
+  foreach ($ReturnFlightList as $Flight) {
+    $StartDate = trim(DecryptCiphertext(utf8_decode($Flight["STARTDATE"])));
+    if (strtotime($SearchResult["EndDate"]) == strtotime($StartDate)) {
+      array_push($EndFlightList, Push($Flight));
+    }
+  }
+  $TempArr2 = [];
+  if ($Sort1 == 1 && $Sort2 == 1) {
+    foreach ($EndFlightList as $Flight) {
+      $StartTime = trim(DecryptCiphertext(utf8_decode($Flight["STARTTIME"])));
+      $EndTime = trim(DecryptCiphertext(utf8_decode($Flight["ENDTIME"])));
+      if (strtotime($StartTime) >= strtotime($StartTimeArray[0]) && strtotime($StartTime) <= strtotime($StartTimeArray[1]) && strtotime($EndTime) >= strtotime($EndTimeArray[0]) && strtotime($EndTime) <= strtotime($EndTimeArray[1])) {
+        array_push($TempArr, Push($Flight));
+      }
+    }
+    $EndFlightList = $TempArr2;
+  }
+  if ($Sort1 == 1 && $Sort2 == 0) {
+    foreach ($EndFlightList as $Flight) {
+      $StartTime = trim(DecryptCiphertext(utf8_decode($Flight["STARTTIME"])));
+      if (strtotime($StartTime) >= strtotime($StartTimeArray[0]) && strtotime($StartTime) <= strtotime($StartTimeArray[1])) {
+        array_push($TempArr, Push($Flight));
+      }
+    }
+    $EndFlightList = $TempArr2;
+  }
+  if ($Sort2 == 1 && $Sort1 == 0) {
+    foreach ($EndFlightList as $Flight) {
+      $EndTime = trim(DecryptCiphertext(utf8_decode($Flight["ENDTIME"])));
+      if (strtotime($EndTime) >= strtotime($EndTimeArray[0]) && strtotime($EndTime) <= strtotime($EndTimeArray[1])) {
+        array_push($TempArr2, Push($Flight));
+      }
+    }
+    $EndFlightList = $TempArr2;
+  }
+  if ($Sort3 == 1) {
+    $price = array_column($EndFlightList, strtoupper($SearchResult["SortValue"]));
+    array_multisort($price, SORT_ASC, $EndFlightList);
+  }
+  $Array["SecondList"] = HeaderHTML($SearchResult["EndDate"], $ReversePath) . BodyHTML($EndFlightList, $ReversePath);
 }
 die(json_encode($Array));

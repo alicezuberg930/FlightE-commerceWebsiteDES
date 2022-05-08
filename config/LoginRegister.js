@@ -110,6 +110,7 @@ $("#register").click(() => {
             method: "post",
             data: { UserInfo: { username: username, email: email, password: password, phonenumber: phonenumber, gender: gender } },
             success: function (data) {
+                console.log(JSON.parse(data))
                 let Obj = JSON.parse(data)
                 if (Obj.Email != '') {
                     ErrorNotification($("#r-email-error"), $("#r-email-success"), $(".r-email"), $(".form-box").find("span").eq(3), Obj.Email)

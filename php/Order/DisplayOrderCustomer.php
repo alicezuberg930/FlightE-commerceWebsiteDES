@@ -6,7 +6,6 @@ if (isset($_SESSION["Payment"]) && isset($_SESSION["Order"]) && isset($_SESSION[
     unset($_SESSION["OrderDetail"]);
 }
 $UserID = $OrderHTML = $ReturnDate  = '';
-$i = 1;
 if (isset($_SESSION["Member"]))
     $UserID = $_SESSION["Member"]["MEMBERID"];
 $OrderList = $OrderObject->GetOrder(" where MemberID = '" . $UserID . "' order by OrderDate desc");
@@ -28,7 +27,7 @@ if (sizeof($OrderList) != 0) {
         $OrderHTML .= "<tr data-id='" . $Order["ORDERID"] . "'>
             <td>" . date("d-m-Y", strtotime($OrderDate))  . "</td>
             <td>" . number_format($TotalPrice) . " VND</td>
-            <td>" . $TotalWeight . " kg</td>
+            <td>" . $TotalWeight . "</td>
             <td>" . $Quantity . "</td>
             <td>" . $Startflight . "</td>
             <td>" . date("d-m-Y", strtotime($StarDate))  . "</td>
@@ -38,7 +37,6 @@ if (sizeof($OrderList) != 0) {
             <td><button id='cancel' class='btn bg-danger btn-sm'><i class='fas fa-trash-alt'></i></button></td>
             <td><button id='detail' class='btn bg-info btn-sm'><i class='fas fa-info-circle'></i></button></td>
         </tr>";
-        $i++;
     }
 } else {
     $OrderHTML = "<tr><td colspan='12' style='font-size: 2rem;' class='text-center'>Không có đơn hàng</td></tr>";

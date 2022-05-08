@@ -1,7 +1,12 @@
 <?php $vnp_TmnCode = "Y4U88XFK"; //Mã website tại VNPAY 
 $vnp_HashSecret = "DTHXNFNBUMNKFKQOZVHTXUXNUQUUXMTV"; //Chuỗi bí mật
 $vnp_Url = "http://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
-$vnp_Returnurl = "http://localhost/projects/QuanLyVeMayBay/vnpay_php/vnpay_return.php";
+$a = explode("/", $_SERVER["SCRIPT_FILENAME"]);
+$string = '';
+for ($i = 3; $i < sizeof($a) - 1; $i++) {
+    $string .= $a[$i] . "/";
+}
+$vnp_Returnurl = "http://localhost/" . $string . "vnpay_return.php";
 require_once("../DESAlgorithm.php");
 function AddOrder($order)
 {
@@ -26,7 +31,7 @@ function AddOrder($order)
         '" . $ContactName . "','" . $Address . "','" . $TotalWeight . "')";
     } else {
         $sql  = "INSERT INTO orders(OrderID,StartDate,ReturnDate,StartFlight,Quantity,TotalPrice,State,EmployeeID,OrderDate,MemberID,ContactEmail,ContactName,Address,TotalWeight,ReturnFlight) 
-        VALUES('" . $OrderID . "',q'[$StartDate]',q'[$ReturnDate]',q'[" . $StartFlight . "]',q'[" . $Quantity . "]',q'[" . $TotalPrice . "]',q'[" . $State . "]',$EmployeeID,'$OrderDate'),'" . $MemberID . "',q'[" . $ContactEmail . "]',
+        VALUES('" . $OrderID . "',q'[$StartDate]',q'[$ReturnDate]',q'[" . $StartFlight . "]',q'[" . $Quantity . "]',q'[" . $TotalPrice . "]',q'[" . $State . "]',$EmployeeID,'$OrderDate','" . $MemberID . "',q'[" . $ContactEmail . "]',
         q'[" . $ContactName . "]',q'[" . $Address . "]',q'[" . $TotalWeight . "]',q'[" . $ReturnFlight . "]')";
     }
     return Query($sql);
@@ -65,5 +70,5 @@ function AddPayment($PaymentArr)
     $BankCode = $PaymentArr["BankCode"];
     $PaymentTime = $PaymentArr["PaymentTime"];
     return Query("INSERT INTO payments(OrderID,Total,Note,vnp_response_code,code_vnpay,BankCode,PaymentTime) 
-        VALUES ('" . $OrderID . "','" . $Total . "','" . $Note . "','" . $vnp_response_code . "','" . $code_vnpay . "','" . $BankCode . "',to_date('$PaymentTime','dd-mm-yyyy'))");
+        VALUES ('" . $OrderID . "','" . $Total . "','" . $Note . "','" . $vnp_response_code . "','" . $code_vnpay . "','" . $BankCode . "','" . $PaymentTime . "')");
 }

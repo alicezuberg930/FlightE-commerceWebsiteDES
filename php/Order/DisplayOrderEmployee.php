@@ -1,7 +1,10 @@
 <?php require_once("../../class/order.php");
 require_once("../../DESAlgorithm.php");
 session_start();
-$OrderHTML = $State = $Style = $ReturnDate = '';
+if (!isset($_SESSION['Employee'])) {
+    die(json_encode(array("status" => "error", "message" => "You are not logged in")));
+}
+$State = $Style = $ReturnDate = '';
 if (isset($_POST["p"])) {
     $Start = ($_POST["p"] - 1) * 5;
     $OrderList = $OrderObject->GetOrder(" ORDER BY StartDate desc offset $Start rows fetch next 5 row only");
@@ -32,19 +35,19 @@ foreach ($OrderList as $Order) {
     $ReturnDate = $Order["RETURNDATE"];
     $OrderState = $Order["STATE"];
     if ($_SESSION["Employee"]["ROLE"] == "Bán hàng" || $_SESSION["Employee"]["ROLE"] == "Quản trị viên") {
-        $TotalPrice = number_format(DecryptCiphertext(utf8_decode($TotalPrice)));
-        $TotalWeight = DecryptCiphertext(utf8_decode($TotalWeight));
-        $Quantity = DecryptCiphertext(utf8_decode($Quantity));
-        $StartFlight = DecryptCiphertext(utf8_decode($StartFlight));
-        $StartDate = date("d-m-Y", strtotime(DecryptCiphertext(utf8_decode($StartDate))));
-        $ContactName = DecryptCiphertext(utf8_decode($ContactName));
-        $ContactEmail = DecryptCiphertext(utf8_decode($ContactEmail));
-        $Address = DecryptCiphertext(utf8_decode($Address));
-        $ReturnFlight = DecryptCiphertext(utf8_decode($ReturnFlight));
-        $ReturnDate = date("d-m-Y", strtotime(DecryptCiphertext(utf8_decode($ReturnDate))));
-        $OrderState = DecryptCiphertext(utf8_decode($OrderState));
+        $TotalPrice = number_format(trim(DecryptCiphertext(utf8_decode($TotalPrice)))) . "VND";
+        $TotalWeight = trim(DecryptCiphertext(utf8_decode($TotalWeight)));
+        $Quantity = trim(DecryptCiphertext(utf8_decode($Quantity)));
+        $StartFlight = trim(DecryptCiphertext(utf8_decode($StartFlight)));
+        $StartDate = date("d-m-Y", strtotime(trim(DecryptCiphertext(utf8_decode($StartDate)))));
+        $ContactName = trim(DecryptCiphertext(utf8_decode($ContactName)));
+        $ContactEmail = trim(DecryptCiphertext(utf8_decode($ContactEmail)));
+        $Address = trim(DecryptCiphertext(utf8_decode($Address)));
+        $ReturnFlight = trim(DecryptCiphertext(utf8_decode($ReturnFlight)));
+        $ReturnDate = date("d-m-Y", strtotime(trim(DecryptCiphertext(utf8_decode($ReturnDate)))));
+        $OrderState = trim(DecryptCiphertext(utf8_decode($OrderState)));
     }
-    if ($OrderState == 'Đã giao' || $OrderState == 'Đã hủy') {
+    if ($OrderState == 'Đã giao' || $OrderState == 'Đã hủy' || $_SESSION["Employee"]["ROLE"] == "Kế toán") {
         $Disabled = "disabled='disabled'";
     } else {
         $Disabled = '';

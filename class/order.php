@@ -19,9 +19,9 @@ class order
     {
         return GetObjectArray("select * from orders" . $SQL);
     }
-    public function GetOrders()
+    public function GetOrders($SQL)
     {
-        return GetObjectArray("select * from orderdetails od, orders o where od.OrderID = o.OrderID");
+        return GetObjectArray("select * from orderdetails od, orders o where od.OrderID = o.OrderID" . $SQL);
     }
     public function GetOrderDetail($ID)
     {
